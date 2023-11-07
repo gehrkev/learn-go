@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
 )
@@ -52,4 +53,30 @@ func newDeckFromFile(filename string) deck {
 
 	s := strings.Split(string(bs), ",")
 	return deck(s)
+}
+
+func (d deck) shuffle() {
+	//source := rand.NewSource(time.Now().UnixNano() //as of Go 1.20, there is no need to seed the rand
+	//r := rand.New(source)							// but learning about seeding is interesting
+
+	for i := range d {
+		//newPosition := r.Intn(len(d) - 1)
+		newPosition := rand.Intn(len(d) - 1)
+
+		d[i], d[newPosition] = d[newPosition], d[i]
+	}
+}
+
+func compareDecks(d1, d2 deck) bool {
+	if len(d1) != len(d2) {
+		return false
+	}
+
+	for i, card := range d1 {
+		if card != d2[i] {
+			return false
+		}
+	}
+
+	return true
 }
